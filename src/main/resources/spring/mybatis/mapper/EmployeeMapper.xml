@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.atyuanian.cl_example5_java.Mapper.EmployeeMapper">
+  <resultMap id="BaseResultMap" type="com.atyuanian.cl_example5_java.Entity.Employee">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="usercode" jdbcType="INTEGER" property="usercode" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="hiredate" jdbcType="DATE" property="hiredate" />
+    <!--    <association/>一对一标签-->
+    <association column="departmentid" jdbcType="INTEGER" property="department" javaType="com.atyuanian.cl_example5_java.Entity.Department" >
+      <id column="id" jdbcType="INTEGER" property="id" />
+      <result column="departmentname" jdbcType="VARCHAR" property="departmentname" />
+    </association>
+  </resultMap>
+
+  <select id="findEmployeesByDate"  resultMap="BaseResultMap">
+      select
+        e.id,
+        e.usercode,
+        e.username,
+        e.departmentid,
+        e.hiredate,
+        d.departmentname
+      from
+        employee e,
+        department d
+      where
+          e.hiredate >= #{startTime}
+      and
+         e.hiredate &lt;  #{lastTime}
+      and
+        e.departmentid=d.id
+  </select>
+
+  <select id="selectByUsercode"  resultMap="BaseResultMap">
+      select
+        e.id,
+        e.usercode,
+        e.username,
+        e.departmentid,
+        e.hiredate,
+        d.departmentname
+      from
+        employee e,
+        department d
+      where
+        e.departmentid=d.id
+        and
+        e.usercode=#{usercode}
+  </select>
+
+<!--  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">-->
+<!--    delete from employee-->
+<!--    where id = #{id,jdbcType=INTEGER}-->
+<!--  </delete>-->
+  <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="com.atyuanian.cl_example5_java.Entity.Employee">
+    insert into employee (id, usercode, username, 
+      departmentid, hiredate)
+    values (#{id,jdbcType=INTEGER}, #{usercode,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, 
+      #{department.id}, #{hiredate,jdbcType=DATE})
+  </insert>
+<!--  <insert id="insertSelective" parameterType="com.atyuanian.cl_example5_java.Entity.Employee">-->
+<!--    insert into employee-->
+<!--    <trim prefix="(" suffix=")" suffixOverrides=",">-->
+<!--      <if test="id != null">-->
+<!--        id,-->
+<!--      </if>-->
+<!--      <if test="usercode != null">-->
+<!--        usercode,-->
+<!--      </if>-->
+<!--      <if test="username != null">-->
+<!--        username,-->
+<!--      </if>-->
+<!--      <if test="department != null">-->
+<!--        department,-->
+<!--      </if>-->
+<!--      <if test="hiredate != null">-->
+<!--        hiredate,-->
+<!--      </if>-->
+<!--    </trim>-->
+<!--    <trim prefix="values (" suffix=")" suffixOverrides=",">-->
+<!--      <if test="id != null">-->
+<!--        #{id,jdbcType=INTEGER},-->
+<!--      </if>-->
+<!--      <if test="usercode != null">-->
+<!--        #{usercode,jdbcType=INTEGER},-->
+<!--      </if>-->
+<!--      <if test="username != null">-->
+<!--        #{username,jdbcType=VARCHAR},-->
+<!--      </if>-->
+<!--      <if test="department != null">-->
+<!--        #{department,jdbcType=VARCHAR},-->
+<!--      </if>-->
+<!--      <if test="hiredate != null">-->
+<!--        #{hiredate,jdbcType=DATE},-->
+<!--      </if>-->
+<!--    </trim>-->
+<!--  </insert>-->
+<!--  <update id="updateByPrimaryKeySelective" parameterType="com.atyuanian.cl_example5_java.Entity.Employee">-->
+<!--    update employee-->
+<!--    <set>-->
+<!--      <if test="usercode != null">-->
+<!--        usercode = #{usercode,jdbcType=INTEGER},-->
+<!--      </if>-->
+<!--      <if test="username != null">-->
+<!--        username = #{username,jdbcType=VARCHAR},-->
+<!--      </if>-->
+<!--      <if test="department != null">-->
+<!--        department = #{department,jdbcType=VARCHAR},-->
+<!--      </if>-->
+<!--      <if test="hiredate != null">-->
+<!--        hiredate = #{hiredate,jdbcType=DATE},-->
+<!--      </if>-->
+<!--    </set>-->
+<!--    where id = #{id,jdbcType=INTEGER}-->
+<!--  </update>-->
+<!--  <update id="updateByPrimaryKey" parameterType="com.atyuanian.cl_example5_java.Entity.Employee">-->
+<!--    update employee-->
+<!--    set usercode = #{usercode,jdbcType=INTEGER},-->
+<!--      username = #{username,jdbcType=VARCHAR},-->
+<!--      department = #{department,jdbcType=VARCHAR},-->
+<!--      hiredate = #{hiredate,jdbcType=DATE}-->
+<!--    where id = #{id,jdbcType=INTEGER}-->
+<!--  </update>-->
+</mapper>
